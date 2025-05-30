@@ -4,551 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="image/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="styles.css">
+
   <title>YourChessBuddy</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --primary-purple: #8B5CF6;
-      --secondary-purple: #A855F7;
-      --dark-purple: #6D28D9;
-      --light-purple: #C4B5FD;
-      --purple-gradient: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
-      --dark-bg: #0F0F23;
-      --darker-bg: #050014;
-      --text-light: #E5E7EB;
-      --text-muted: #9CA3AF;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--dark-bg);
-      color: var(--text-light);
-      overflow-x: hidden;
-      line-height: 1.6;
-    }
-
-    /* Header */
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: rgba(15, 15, 35, 0.9);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(139, 92, 246, 0.1);
-      z-index: 1000;
-      transition: all 0.3s ease;
-    }
-
-    .header-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      background: var(--purple-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    nav ul {
-      display: flex;
-      list-style: none;
-      gap: 2rem;
-    }
-
-    nav a {
-      color: var(--text-light);
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    nav a:hover {
-      color: var(--primary-purple);
-    }
-
-    nav a::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--purple-gradient);
-      transition: width 0.3s ease;
-    }
-
-    nav a:hover::after {
-      width: 100%;
-    }
-
-    /* Hero Section */
-    .hero {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.1) 0%, var(--dark-bg) 70%);
-    }
-
-    .hero-content {
-      text-align: center;
-      max-width: 800px;
-      padding: 0 2rem;
-      z-index: 2;
-      opacity: 0;
-      transform: translateY(50px);
-      animation: fadeInUp 1s ease 0.5s forwards;
-    }
-
-    .hero h1 {
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: 800;
-      margin-bottom: 1.5rem;
-      background: var(--purple-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1.1;
-    }
-
-    .hero p {
-      font-size: 1.3rem;
-      color: var(--text-muted);
-      margin-bottom: 2.5rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .cta-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem 2.5rem;
-      background: var(--purple-gradient);
-      color: white;
-      text-decoration: none;
-      border-radius: 50px;
-      font-weight: 600;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
-      border: none;
-      cursor: pointer;
-      text-align: center;
-      min-height: 3.5rem;
-    }
-
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
-    }
-
-    /* Floating Elements */
-    .floating-element {
-      position: absolute;
-      opacity: 0.08;
-      animation: float 8s ease-in-out infinite;
-      font-size: 2rem;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .floating-element:nth-child(1) {
-      top: 15%;
-      left: 8%;
-      animation-delay: 0s;
-      font-size: 1.5rem;
-    }
-
-    .floating-element:nth-child(2) {
-      top: 65%;
-      right: 12%;
-      animation-delay: 2s;
-      font-size: 2.5rem;
-    }
-
-    .floating-element:nth-child(3) {
-      bottom: 25%;
-      left: 18%;
-      animation-delay: 4s;
-      font-size: 1.8rem;
-    }
-
-    .floating-element:nth-child(4) {
-      top: 35%;
-      right: 25%;
-      animation-delay: 1s;
-      font-size: 1.2rem;
-    }
-
-    .floating-element:nth-child(5) {
-      top: 75%;
-      left: 35%;
-      animation-delay: 3s;
-      font-size: 2rem;
-    }
-
-    .floating-element:nth-child(6) {
-      bottom: 45%;
-      right: 5%;
-      animation-delay: 5s;
-      font-size: 1.6rem;
-    }
-
-    .floating-element:nth-child(7) {
-      top: 10%;
-      left: 50%;
-      animation-delay: 6s;
-      font-size: 1.3rem;
-    }
-
-    .floating-element:nth-child(8) {
-      bottom: 15%;
-      right: 40%;
-      animation-delay: 7s;
-      font-size: 2.2rem;
-    }
-
-    /* Background floating particles for other sections */
-    .section-particles {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .particle {
-      position: absolute;
-      opacity: 0.03;
-      animation: floatParticle 12s linear infinite;
-    }
-
-    .particle:nth-child(odd) {
-      animation-duration: 15s;
-    }
-
-    .particle:nth-child(even) {
-      animation-duration: 10s;
-    }
-
-    /* Sections */
-    .section {
-      padding: 8rem 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      opacity: 0;
-      transform: translateY(100px);
-      transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      position: relative;
-    }
-
-    .section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .section.hidden {
-      display: none !important;
-    }
-
-    .section.centered-view {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%;
-      max-width: 1200px;
-      padding: 4rem 2rem;
-      z-index: 100;
-      background: var(--dark-bg);
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    }
-
-    .section-title {
-      font-size: 3rem;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 1rem;
-      background: var(--purple-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .section-subtitle {
-      text-align: center;
-      font-size: 1.2rem;
-      color: var(--text-muted);
-      margin-bottom: 4rem;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* Service Grid */
-    .service-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-
-    .service-card {
-      background: rgba(139, 92, 246, 0.05);
-      border: 1px solid rgba(139, 92, 246, 0.1);
-      border-radius: 20px;
-      padding: 2.5rem;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-    }
-
-    .service-card:hover {
-      transform: translateY(-10px);
-      border-color: rgba(139, 92, 246, 0.3);
-      box-shadow: 0 20px 40px rgba(139, 92, 246, 0.1);
-    }
-
-    .service-card h3 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: var(--primary-purple);
-    }
-
-    .service-card p {
-      color: var(--text-muted);
-      line-height: 1.7;
-    }
-
-    /* Features Section */
-    .features {
-      background: linear-gradient(180deg, var(--dark-bg) 0%, var(--darker-bg) 50%, var(--darker-bg) 100%);
-      margin: 0 -2rem;
-      padding: 8rem 2rem;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 3rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .feature-item {
-      text-align: center;
-      padding: 2rem;
-    }
-
-    .feature-icon {
-      width: 80px;
-      height: 80px;
-      background: var(--purple-gradient);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1.5rem;
-      font-size: 2rem;
-    }
-
-    .feature-item h3 {
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-      color: var(--text-light);
-    }
-
-    .feature-item p {
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* Footer */
-    footer {
-      background: linear-gradient(180deg, var(--darker-bg) 0%, #030010 100%);
-      padding: 3rem 2rem;
-      text-align: center;
-      border-top: 1px solid rgba(139, 92, 246, 0.1);
-    }
-
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .footer-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-
-    .footer-links a:hover {
-      color: var(--primary-purple);
-    }
-
-    /* Overlay for centered view */
-    .page-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(15, 15, 35, 0.95);
-      backdrop-filter: blur(20px);
-      z-index: 50;
-      display: none;
-    }
-
-    .page-overlay.active {
-      display: block;
-    }
-    /* Back to Home Button */
-    .back-to-home {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      background: var(--purple-gradient);
-      color: white;
-      border: none;
-      padding: 1rem;
-      border-radius: 50%;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
-      transition: all 0.3s ease;
-      z-index: 1000;
-      display: none;
-    }
-
-    .back-to-home:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
-    }
-
-    .back-to-home.visible {
-      display: block;
-    }
-
-    /* Animations */
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes float {
-      0%, 100% { 
-        transform: translateY(0px) rotate(0deg) scale(1); 
-        opacity: 0.08;
-      }
-      25% { 
-        transform: translateY(-15px) rotate(90deg) scale(1.1); 
-        opacity: 0.12;
-      }
-      50% { 
-        transform: translateY(-30px) rotate(180deg) scale(0.9); 
-        opacity: 0.06;
-      }
-      75% { 
-        transform: translateY(-15px) rotate(270deg) scale(1.05); 
-        opacity: 0.1;
-      }
-    }
-
-    @keyframes floatParticle {
-      0% {
-        transform: translateY(100vh) translateX(0px) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.03;
-      }
-      90% {
-        opacity: 0.03;
-      }
-      100% {
-        transform: translateY(-100px) translateX(100px) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .header-container {
-        padding: 1rem;
-      }
-      
-      nav ul {
-        gap: 1rem;
-      }
-      
-      .section {
-        padding: 4rem 1rem;
-      }
-      
-      .service-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-      
-      .features-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-      
-      .footer-links {
-        flex-direction: column;
-        gap: 1rem;
-      }
-    }
-
-    /* Scroll Progress Bar */
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 0%;
-      height: 3px;
-      background: var(--purple-gradient);
-      z-index: 1001;
-      transition: width 0.1s ease;
-    }
-  </style>
+  
 </head>
 <body>
   <div class="page-overlay"></div>
@@ -560,7 +19,7 @@
       <nav>
         <ul>
           <li><a href="#home">Home</a></li>
-          <li><a href="#about">About Us</a></li>
+          <li><a href="#about">About</a></li>
           <li><a href="#services">Benefits</a></li>
           <li><a href="#features">Features</a></li>
           <li><a href="#contact">Contact</a></li>
@@ -580,7 +39,7 @@
       <h1>The Future of Chess Education</h1>
       <p>A comprehensive Learning Management System for chess coaches and students</p>
       <a href="#contact" class="cta-button">Get Started</a>
-    </div>
+        </div>
   </section>
 
   <section class="section" id="about" style="margin-top: 150px;">
@@ -670,14 +129,86 @@
       </div>
   </section>
 
-  <section class="section" id="contact">
-    <h2 class="section-title">Get Started Today</h2>
-    <p class="section-subtitle">Ready to transform your chess teaching experience?</p>
-    <div style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">
-      <p style="font-size: 1.1rem; color: var(--text-muted); line-height: 1.8;">Contact us to get a quote for your customized Chess LMS Platform</p>
-    </div>
-    <div style="text-align: center;">
-      <a href="mailto:contact.yourchessbuddy@gmail.com" class="cta-button">Contact Us</a>
+  <section class="hero" id="contact" style="height: auto; min-height: 100vh; padding: 120px 0 60px 0;">
+    <div class="floating-element">♔</div>
+    <div class="floating-element">♕</div>
+    <div class="floating-element">♖</div>
+    <div class="floating-element">♗</div>
+    <div class="floating-element">♘</div>
+    <div class="floating-element">♙</div>
+    
+    <div style="display: flex; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+      <!-- Left side content -->
+      <div style="flex: 1; min-width: 300px; padding-right: 2rem; z-index: 2;">
+        <div class="hero-content" style="text-align: left; opacity: 1; transform: none;">
+          <h1>Contact Us</h1>
+          <p>We'd love to hear from you! Reach out to our team with any questions about YourChessBuddy.</p>
+          <p style="margin-top: 2rem; color: var(--text-light);">Our team is ready to help you with:</p>
+          <ul style="list-style-type: none; margin: 1.5rem 0; color: var(--text-muted);">
+            <li style="margin-bottom: 1rem; display: flex; align-items: center;">
+              <span style="margin-right: 10px; color: var(--primary-purple);">♔</span> Setting up your chess coaching business
+            </li>
+            <li style="margin-bottom: 1rem; display: flex; align-items: center;">
+              <span style="margin-right: 10px; color: var(--primary-purple);">♕</span> Technical support for the platform
+            </li>
+            <li style="margin-bottom: 1rem; display: flex; align-items: center;">
+              <span style="margin-right: 10px; color: var(--primary-purple);">♖</span> Custom features for your specific needs
+            </li>
+            <li style="margin-bottom: 1rem; display: flex; align-items: center;">
+              <span style="margin-right: 10px; color: var(--primary-purple);">♗</span> Pricing and subscription questions
+            </li>
+          </ul>
+          <a href="#home" class="cta-button">Back to Home</a>
+        </div>
+      </div>    
+      
+      <div class="contact-form-container" style="flex: 1; min-width: 300px; z-index: 2;">
+        <h2 class="form-title">Get In Touch</h2>
+        <p class="form-subtitle">We'd love to hear from you. Send us a message!</p>
+        
+        <form action="https://formspree.io/f/xovwawld" method="POST">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+      
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+      
+          <div class="form-group">
+            <label for="reason">Reason for Contact</label>
+            <select id="reason" name="reason" required>
+              <option value="">Please select a reason</option>
+              <option value="general-inquiry">General Inquiry</option>
+              <option value="demo">Demo Request</option>
+              <option value="business">Business Partnership</option>
+              <option value="feedback">Feedback</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+      
+          <div class="form-group">
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" placeholder="Tell us more about how we can help you..." required></textarea>
+          </div>
+      
+          <div class="checkbox-group">
+            <input type="checkbox" id="newsletter" name="newsletter" value="yes">
+            <label for="newsletter">Subscribe to our newsletter for updates and exclusive content</label>
+          </div>
+      
+          <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+        <div id="success-message" style="display: none; background: #d4edda; color: #155724; padding: 16px; border-radius: 12px; margin-top: 20px; text-align: center;">
+          ✅ Thank you! Your message has been sent successfully.
+        </div>
+      
+        <div id="error-message" style="display: none; background: #f8d7da; color: #721c24; padding: 16px; border-radius: 12px; margin-top: 20px; text-align: center;">
+          ❌ Sorry, there was an error sending your message. Please try again.
+        </div>
+      </div>
     </div>
   </section>
 
@@ -695,152 +226,7 @@
   </footer>
 
   <button class="back-to-home" onclick="showAllSections()">🏠</button>
+  <script src="script.js"></script>
 
-  <script>
-    let currentSingleSection = null;
-
-    // Smooth scroll reveal animation
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, observerOptions);
-
-    // Observe all sections
-    document.querySelectorAll('.section').forEach(section => {
-      observer.observe(section);
-    });
-
-    // Function to show section in centered view
-    function showCenteredSection(targetId) {
-      const overlay = document.querySelector('.page-overlay');
-      const backButton = document.querySelector('.back-to-home');
-      const targetSection = document.querySelector(targetId);
-      
-      if (targetSection) {
-        // Show overlay
-        overlay.classList.add('active');
-        
-        // Add centered view class to target section
-        targetSection.classList.add('centered-view');
-        targetSection.classList.add('visible');
-        
-        // Show back button with higher z-index
-        backButton.classList.add('visible');
-        backButton.style.zIndex = '1100';
-        
-        currentSingleSection = targetId;
-        
-        // Prevent body scroll
-        document.body.style.overflow = 'hidden';
-      }
-    }
-
-    // Function to show all sections (back to normal view)
-    function showAllSections() {
-      const overlay = document.querySelector('.page-overlay');
-      const backButton = document.querySelector('.back-to-home');
-      const allSections = document.querySelectorAll('.section');
-      
-      // Hide overlay
-      overlay.classList.remove('active');
-      
-      // Remove centered view from all sections
-      allSections.forEach(section => {
-        section.classList.remove('centered-view');
-      });
-      
-      // Hide back button
-      backButton.classList.remove('visible');
-      
-      // Restore body scroll
-      document.body.style.overflow = '';
-      
-      currentSingleSection = null;
-      
-      // Scroll to top smoothly
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Scroll progress bar
-    window.addEventListener('scroll', () => {
-      const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-      document.querySelector('.scroll-progress').style.width = scrolled + '%';
-    });
-
-    // Header background on scroll
-    window.addEventListener('scroll', () => {
-      const header = document.querySelector('header');
-      if (window.scrollY > 100) {
-        header.style.background = 'rgba(15, 15, 35, 0.95)';
-      } else {
-        header.style.background = 'rgba(15, 15, 35, 0.9)';
-      }
-    });
-
-    // Enhanced navigation link handling
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        
-        // If clicking from hero CTA button, show centered section
-        if (this.classList.contains('cta-button')) {
-          if (targetId !== '#home') {
-            showCenteredSection(targetId);
-          } else {
-            showAllSections();
-          }
-        } 
-        // If clicking from navigation, do regular smooth scroll
-        else if (this.closest('nav')) {
-          if (targetId === '#home') {
-            showAllSections();
-          } else {
-            const target = document.querySelector(targetId);
-            if (target && !currentSingleSection) {
-              const headerHeight = document.querySelector('header').offsetHeight;
-              const targetPosition = target.offsetTop - headerHeight - 50;
-              
-              window.scrollTo({
-                top: targetPosition,
-                behavior: 'smooth'
-              });
-            }
-          }
-        } else {
-          // Regular smooth scroll for other links
-          const target = document.querySelector(targetId);
-          if (target && !currentSingleSection) {
-            const headerHeight = document.querySelector('header').offsetHeight;
-            const targetPosition = target.offsetTop - headerHeight - 50;
-            
-            window.scrollTo({
-              top: targetPosition,
-              behavior: 'smooth'
-            });
-          }
-        }
-      });
-    });
-
-    // Add subtle parallax effect to floating elements
-    window.addEventListener('scroll', () => {
-      const scrolled = window.pageYOffset;
-      const rate = scrolled * -0.5;
-      
-      document.querySelectorAll('.floating-element').forEach((element, index) => {
-        const speed = (index + 1) * 0.3;
-        element.style.transform = `translateY(${rate * speed}px) rotate(${scrolled * 0.1}deg)`;
-      });
-    });
-  </script>
 </body>
 </html>
